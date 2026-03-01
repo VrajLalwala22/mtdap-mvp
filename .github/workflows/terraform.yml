@@ -6,11 +6,18 @@ on:
       - 'tenants/**'
       - 'infra/**'
       - 'main.tf'
+      - 'variables.tf'
 
-jobs:
+jobs:   
   terraform:
     runs-on: self-hosted
 
+    env:
+      TF_VAR_kube_host: ${{ secrets.KUBE_HOST }}
+      TF_VAR_kube_cluster_ca_certificate: ${{ secrets.KUBE_CLUSTER_CA_CERTIFICATE }}
+      TF_VAR_kube_client_certificate: ${{ secrets.KUBE_CLIENT_CERTIFICATE }}
+      TF_VAR_kube_client_key: ${{ secrets.KUBE_CLIENT_KEY }}
+      
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -22,4 +29,4 @@ jobs:
         run: terraform init
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve -var-file=tenants/client-a.tfvars
+        run: terraform apply -auto-approve
