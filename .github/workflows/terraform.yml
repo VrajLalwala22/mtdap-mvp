@@ -1,0 +1,25 @@
+name: MTDAP Pipeline
+
+on:
+  push:
+    paths:
+      - 'tenants/**'
+      - 'infra/**'
+      - 'main.tf'
+
+jobs:
+  terraform:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
